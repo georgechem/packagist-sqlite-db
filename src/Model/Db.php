@@ -22,7 +22,7 @@ abstract class Db
     {
         if(empty(self::$pdo)){
             try {
-                self::$pdo = new \PDO('sqlite:' . __DIR__ . '/' . $_ENV['DB_FILE'], null, null, [
+                self::$pdo = new \PDO('sqlite:' . __DIR__ . '/' . 'sqlite_db.sqlite3', null, null, [
                     \PDO::ATTR_EMULATE_PREPARES => false,
                     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                     \PDO::ATTR_PERSISTENT,
