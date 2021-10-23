@@ -2,6 +2,9 @@
 
 namespace Georgechem\SqliteDb\Model;
 
+/**
+ * Users - storage
+ */
 class Users extends Db
 {
     /**
@@ -44,6 +47,18 @@ class Users extends Db
             return (bool) $result;
         }
         return $result;
+    }
+
+    /**
+     * Return All users from database
+     * @return bool|array
+     */
+    public function getUsers(): bool|array
+    {
+        return $this->query("
+            SELECT * FROM users WHERE 1;
+        ", true);
+
     }
 
     /**

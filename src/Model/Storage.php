@@ -2,7 +2,9 @@
 declare(strict_types=1);
 
 namespace Georgechem\SqliteDb\Model;
-
+/**
+ * General Purpose storage
+ */
 class Storage extends Db
 {
 

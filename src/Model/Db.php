@@ -2,9 +2,11 @@
 
 namespace Georgechem\SqliteDb\Model;
 
+use PDO;
+
 abstract class Db
 {
-    protected static ?\PDO $pdo = null;
+    protected static ?PDO $pdo = null;
 
     final public function __construct()
     {
@@ -18,15 +20,18 @@ abstract class Db
         $this->create();;
     }
 
-    public static function getConnection():?\PDO
+    /**
+     * @return PDO|null
+     */
+    public static function getConnection():?PDO
     {
         if(empty(self::$pdo)){
             try {
-                self::$pdo = new \PDO('sqlite:' . __DIR__ . '/' . 'sqlite_db.sqlite3', null, null, [
-                    \PDO::ATTR_EMULATE_PREPARES => false,
-                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                    \PDO::ATTR_PERSISTENT,
-                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
+                self::$pdo = new PDO('sqlite:' . __DIR__ . '/' . 'sqlite_db.sqlite3', null, null, [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_PERSISTENT,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
                 ]);
             }catch(\Exception $e){
                 echo $e->getFile() . '<br/>' . $e->getMessage();
@@ -117,11 +122,22 @@ abstract class Db
         return $stmt->fetchAll();
     }
 
+    /**
+     * Hash variable using hash algorithm
+     * @param string $variable
+     * @return string
+     */
     protected function generateHash(string $variable):string
     {
         return password_hash($variable, PASSWORD_ARGON2ID, []);
     }
 
+    /**
+     * Compare original variable with stored hash
+     * @param string $variable
+     * @param string $hash
+     * @return bool
+     */
     protected function compareAgainstHash(string $variable, string $hash):bool
     {
         return password_verify($variable, $hash);
