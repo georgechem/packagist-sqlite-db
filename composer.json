@@ -1,0 +1,21 @@
+{
+    "name": "georgechem/sqlite-db",
+    "description": "Allow quickly create/use sqlite database as a storage.",
+    "type": "library",
+    "require": {
+        "php": ">=8.0.0"
+    },
+    "license": "GPL",
+    "autoload": {
+        "psr-4": {
+            "Georgechem\\SqliteDb\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Grzegorz Chrymecki",
+            "email": "grzegorzchrymecki@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
