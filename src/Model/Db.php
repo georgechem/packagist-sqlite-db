@@ -15,7 +15,7 @@ abstract class Db
         /**
          * Create relevant storage
          */
-        $this->createStorage();;
+        $this->create();;
     }
 
     public static function getConnection():?\PDO
@@ -40,11 +40,19 @@ abstract class Db
      * Storage for objects created automatically when child class is instantiated
      * @return bool
      */
-    abstract public function createStorage():bool;
+    abstract public function create():bool;
 
-    abstract public function destroyStorage():bool;
+    /**
+     * Should be responsible for dropping table in database
+     * @return bool
+     */
+    abstract public function destroy():bool;
 
-    abstract public function emptyStorage():bool;
+    /**
+     * Should be responsible for deleting everything from database
+     * @return bool
+     */
+    abstract public function empty():bool;
 
     /**
      * For details:
@@ -71,14 +79,52 @@ abstract class Db
         return filter_var($variable, $type);
     }
 
+    /**
+     * Serialize value
+     * @param mixed $variable
+     * @return string
+     */
     protected function serialize(mixed $variable):string
     {
        return serialize($variable);
     }
 
+    /**
+     * Unserialize value
+     * @param string $variable
+     * @return mixed
+     */
     protected function unSerialize(string $variable):mixed
     {
         return unserialize($variable);
+    }
+
+    /**
+     * Query helper function
+     * @param string $query
+     * @param bool $isFetch
+     * @param array|null $params
+     * @return array|bool
+     */
+    protected function query(string $query, bool $isFetch = false, array $params = null): array|bool
+    {
+        $stmt = self::$pdo->prepare($query);
+
+        $result = $stmt->execute($params);
+        if(!$isFetch){
+            return $result;
+        }
+        return $stmt->fetchAll();
+    }
+
+    protected function generateHash(string $variable):string
+    {
+        return password_hash($variable, PASSWORD_ARGON2ID, []);
+    }
+
+    protected function compareAgainstHash(string $variable, string $hash):bool
+    {
+        return password_verify($variable, $hash);
     }
 
 

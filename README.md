@@ -15,9 +15,9 @@ class User extends Db {
     
     Methods that must be implemented (required by abstarct class Db)
     
-    public function createStorage(){}
-    public function destroyStorage(){}
-    public function emptyStorage(){}
+    public function create(){}
+    public function destroy(){}
+    public function empty(){}
     
 }
 ```
@@ -56,8 +56,8 @@ $storage->read(string 'test');
 $storage->getAllKeys();
 
 // empty storage (delete only entries but keep table)
-$storage->emptyStorage();
+$storage->empty();
 
 // destroy storage
-$storage->destroyStorage();
+$storage->destroy();
 ```

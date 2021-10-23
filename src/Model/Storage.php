@@ -10,7 +10,7 @@ class Storage extends Db
      * Create Table storage in database
      * @Return True|False on success|failure
      */
-    public function createStorage():bool
+    public function create():bool
     {
         $stmt = self::$pdo->prepare("
             CREATE TABLE IF NOT EXISTS storage(
@@ -27,7 +27,7 @@ class Storage extends Db
      * Drop table storage in database
      * @Return True|False on success|failure
      */
-    public function destroyStorage():bool
+    public function destroy():bool
     {
         $stmt = self::$pdo->prepare("
             DROP TABLE IF EXISTS storage
@@ -38,7 +38,7 @@ class Storage extends Db
     /**
      * @Return True|False on success|failure
      */
-    public function emptyStorage(): bool
+    public function empty(): bool
     {
         $stmt = self::$pdo->prepare("
             DELETE FROM storage WHERE 1;
@@ -115,11 +115,11 @@ class Storage extends Db
     }
 
     /**
-     * Allow to read value associated with given key
+     * Allow reading value associated with given key
      * @param string $key
-     * @return mixed|null
+     * @return mixed
      */
-    public function read(string $key)
+    public function read(string $key): mixed
     {
         $keyExists = $this->isKeyExists($key);
         if(!$keyExists) return null;
