@@ -3,7 +3,8 @@
     "description": "Allow quickly create/use sqlite database as a storage.",
     "type": "library",
     "require": {
-        "php": ">=8.0.0"
+        "php": ">=8.0.0",
+        "vlucas/phpdotenv": "^5.3"
     },
     "license": "MIT",
     "autoload": {
