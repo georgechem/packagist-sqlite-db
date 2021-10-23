@@ -16,8 +16,7 @@ class Storage extends Db
             CREATE TABLE IF NOT EXISTS storage(
                 id integer PRIMARY KEY AUTOINCREMENT,
                 key text NOT NULL UNIQUE,
-                value text,
-                type text NOT NULL
+                value text
             )
         ");
         return $stmt->execute();
@@ -47,6 +46,11 @@ class Storage extends Db
         return $stmt->execute();
     }
 
+    /**
+     * Check is such as key already exists in Storage
+     * @param string $key
+     * @return bool
+     */
     private function isKeyExists(string $key): bool
     {
         $stmt = self::$pdo->prepare("
@@ -60,40 +64,73 @@ class Storage extends Db
         return false;
     }
 
+    public function getAllKeys():array
+    {
+        $stmt = self::$pdo->prepare("
+            SELECT key FROM storage WHERE 1;
+        ");
+        $stmt->execute();
+
+        $results = $stmt->fetchAll();
+        $keys = [];
+        foreach($results as $item){
+            $keys[] = $item['key'];
+        }
+
+        return $keys;
+    }
+
+    /**
+     * Save pair (key, value) in storage
+     * If flag overwrite is set to true, and key already exists value will be overwritten
+     * @param string $key
+     * @param mixed $value
+     * @param bool $overwrite
+     * @return bool|null
+     */
     public function save(string $key, mixed $value, bool $overwrite = false): ?bool
     {
         $keyExists = $this->isKeyExists($key);
         if($keyExists === true && $overwrite !== true) return false;
 
-        $data = null;
-        $type = null;
-        $status = $this->isPrimitive($value);
-
-        if(true === $status['primitive']){
-            $data = (string) $value;
-            $type = $status['type'];
-        }
-        else if(false === $status['primitive']){
-            // TODO object and array so serialize
-            $type = $status['type'];
-        }else{
-            return null;
-        }
+        $data = $this->serialize($value);
 
         if(!$keyExists){
             $stmt = self::$pdo->prepare("
-            INSERT INTO storage (key, value, type) VALUES (:key, :value, :type)
+            INSERT INTO storage (key, value) VALUES (:key, :value)
         ");
         }else {
             $stmt = self::$pdo->prepare("
-                UPDATE storage SET value = :value, type = :type WHERE key = :key;
+                UPDATE storage SET value = :value WHERE key = :key;
             ");
         }
         return $stmt->execute([
             ':key' => $key,
-            ':value' => $data,
-            ':type' => $type
+            ':value' => $data
         ]);
-        return false;
+    }
+
+    /**
+     * Allow to read value associated with given key
+     * @param string $key
+     * @return mixed|null
+     */
+    public function read(string $key)
+    {
+        $keyExists = $this->isKeyExists($key);
+        if(!$keyExists) return null;
+
+        $stmt = self::$pdo->prepare("
+            SELECT * FROM storage WHERE key = :key;
+        ");
+
+        $stmt->execute([
+            ':key' => $key
+        ]);
+
+        $result = $stmt->fetchAll()[0];
+
+        return $this->unSerialize($result['value']);
+
     }
 }

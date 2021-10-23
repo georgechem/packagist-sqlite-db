@@ -8,5 +8,10 @@ require __DIR__ . '/src/bootstrap.php';
 
 $storage = new Storage();
 
-$storage->save('data', 'test1', true);
+//$storage->save('abcd', 'test2');
+
+//$storage->read('test');
+
+//print_r($storage->getAllKeys());
+
 //$storage->destroyStorage();

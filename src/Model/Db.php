@@ -71,14 +71,14 @@ abstract class Db
         return filter_var($variable, $type);
     }
 
-    protected function isPrimitive(mixed $variable):array
+    protected function serialize(mixed $variable):string
     {
-        $type = gettype($variable);
-        return match ($type) {
-            'integer', 'boolean', 'double', 'string' => ['primitive' => true, 'type' => $type],
-            'array', 'object', 'NULL' => ['primitive' => false, 'type' => $type],
-            default => ['primitive' => 'null'],
-        };
+       return serialize($variable);
+    }
+
+    protected function unSerialize(string $variable):mixed
+    {
+        return unserialize($variable);
     }
 
 
