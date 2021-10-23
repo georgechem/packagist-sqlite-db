@@ -9,6 +9,7 @@ abstract class Db
     final public function __construct()
     {
         self::getConnection();
+        $this->createStorage();;
     }
 
     public static function getConnection():?\PDO
@@ -28,5 +29,12 @@ abstract class Db
         return self::$pdo;
 
     }
+
+    abstract public function createStorage():bool;
+
+    abstract public function destroyStorage():bool;
+
+    abstract public function emptyStorage():bool;
+
 
 }
