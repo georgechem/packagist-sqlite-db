@@ -8,5 +8,5 @@ require __DIR__ . '/src/bootstrap.php';
 
 $storage = new Storage();
 
-
+$storage->save('data', 'test1', true);
 //$storage->destroyStorage();

@@ -8,7 +8,13 @@ abstract class Db
 
     final public function __construct()
     {
+        /**
+         * Create connection with relevant database
+         */
         self::getConnection();
+        /**
+         * Create relevant storage
+         */
         $this->createStorage();;
     }
 
@@ -30,11 +36,50 @@ abstract class Db
 
     }
 
+    /**
+     * Storage for objects created automatically when child class is instantiated
+     * @return bool
+     */
     abstract public function createStorage():bool;
 
     abstract public function destroyStorage():bool;
 
     abstract public function emptyStorage():bool;
+
+    /**
+     * For details:
+     * https://www.php.net/manual/en/function.filter-input-array
+     * @param array $input ex: ['email' => FILTER_SANITIZE_EMAIL, 'password' => FILTER_UNSAFE_RAW]
+     * data are provided by $_POST['email'], $_POST['password']
+     * @param int $type
+     * @return array|false
+     */
+    protected function sanitizeInput(array $input, int $type = INPUT_POST):array|false
+    {
+        return filter_input_array($type, $input,false);
+    }
+
+    /**
+     * For details:
+     * https://www.php.net/manual/en/function.filter-var
+     * @param mixed $variable
+     * @param int $type
+     * @return mixed
+     */
+    protected function sanitizeVariable(mixed $variable, int $type = FILTER_SANITIZE_STRING):mixed
+    {
+        return filter_var($variable, $type);
+    }
+
+    protected function isPrimitive(mixed $variable):array
+    {
+        $type = gettype($variable);
+        return match ($type) {
+            'integer', 'boolean', 'double', 'string' => ['primitive' => true, 'type' => $type],
+            'array', 'object', 'NULL' => ['primitive' => false, 'type' => $type],
+            default => ['primitive' => 'null'],
+        };
+    }
 
 
 }
