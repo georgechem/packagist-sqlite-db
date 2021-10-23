@@ -64,6 +64,10 @@ class Storage extends Db
         return false;
     }
 
+    /**
+     * Returns all key present in storage database
+     * @return array
+     */
     public function getAllKeys():array
     {
         $stmt = self::$pdo->prepare("
