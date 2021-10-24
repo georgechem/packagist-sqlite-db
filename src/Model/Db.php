@@ -2,6 +2,7 @@
 
 namespace Georgechem\SqliteDb\Model;
 
+use Dotenv\Dotenv;
 use PDO;
 
 abstract class Db
