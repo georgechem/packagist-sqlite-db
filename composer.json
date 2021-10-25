@@ -9,7 +9,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Georgechem\\SqliteDb\\": "src/"
+            "Georgechem\\SqliteDb\\": ["src/", "tests/"]
         }
     },
     "authors": [
@@ -18,5 +18,8 @@
             "email": "grzegorzchrymecki@gmail.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
 }

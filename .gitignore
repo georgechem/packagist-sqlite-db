@@ -3,3 +3,4 @@ vendor
 .idea
 /index.php
 
+/phpunit-9.5.phar
