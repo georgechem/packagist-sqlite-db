@@ -16,6 +16,7 @@ class Users extends Db
      */
     public function insert($email, $password, $session = null):bool
     {
+        if($this->isUser($email)) return false;
         $password_hash = $this->generateHash($password);
         $session_hash = null;
         if($session){
