@@ -24,7 +24,7 @@ class DbTest extends TestCase
 
     public function tearDown():void
     {
-        
+        $this->conn = null;
     }
 
 }

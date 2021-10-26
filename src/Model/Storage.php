@@ -55,15 +55,21 @@ class Storage extends Db
      */
     private function isKeyExists(string $key): bool
     {
-        $stmt = self::$pdo->prepare("
+        try {
+            $stmt = self::$pdo->prepare("
             SELECT key from storage where key = :key;
         ");
-        $stmt->execute([
-            ':key' => $key
-        ]);
-        $count = count($stmt->fetchAll());
-        if($count > 0) return true;
-        return false;
+            $stmt->execute([
+                ':key' => $key
+            ]);
+            $count = count($stmt->fetchAll());
+            if($count > 0) return true;
+            return false;
+        }catch(\Exception $e){
+            echo $e->getMessage() . ' | line=' . $e->getLine() . ' | file=' . $e->getFile();
+            exit;
+        }
+
     }
 
     /**
