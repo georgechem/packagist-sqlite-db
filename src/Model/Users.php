@@ -35,7 +35,7 @@ class Users extends Db
     public function sanitizeEmail(string $email):?string
     {
         $email = trim($email);
-        $email = filter_input(INPUT_POST, $email, FILTER_SANITIZE_EMAIL);
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
         if($email){
             return $email;
         }
